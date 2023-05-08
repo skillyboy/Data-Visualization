@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main>
+    <div class="container-fluid px-4">
+      <h2 class="mt-4">Countrys' Chart for - {{ title }}  </h2>
+      <button id="toggle-chart" class="btn bg-info m-2">Toggle Chart Type</button>
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-body">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% endblock content %}
+{% block script %}
+
+<script>
+  var ctx = document.getElementById("myChart");
+  var chartType = 'bar';
+  var myChart = new Chart(ctx, {
+    type: chartType,
+    data: {
+      labels: {{ data.lable1|safe}},
+      datasets: [{
+        lineTension: 0.3,
+        backgroundColor: "rgba(2,117,216,0.2)",
+        borderColor: "rgba(2,117,216,1)",
+        pointRadius: 5,
+        pointBackgroundColor: "rgba(2,117,216,1)",
+        pointBorderColor: "rgba(255,255,255,0.8)",
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+        pointHitRadius: 50,
+        pointBorderWidth: 2,
+        data: {{data.data|safe}},
+      }],
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false,
+          },
+          ticks: {
+            min: 0,
+            max:1000,
+            maxTicksLimit:20
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: {{limits|safe}},
+            maxTicksLimit: 15
+          },
+          gridLines: {
+            color: "rgba(0, 0, 0, .125)",
+          }
+        }],
+      },
+      legend: {
+        display:false,
+      }
+    }
+  });
+
+  var toggleButton = document.getElementById("toggle-chart");
+  toggleButton.addEventListener("click", function() {
+    if (chartType === 'bar') {
+      chartType = 'line';
+    } else {
+      chartType = 'bar';
+    }
+    myChart.destroy();
+    myChart = new Chart(ctx, {
+      type: chartType,
+      data: {
+        labels: {{ data.lable1|safe}},
+        datasets: [{
+          lineTension: 0.3,
+          backgroundColor: "rgba(2,117,216,0.2)",
+          borderColor: "rgba(2,117,216,1)",
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(2,117,216,1)",
+          pointBorderColor: "rgba(255,255,255,0.8)",
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(2,117,216,1)",
+          pointHitRadius: 50,
+          pointBorderWidth: 2,
+          data: {{data.data|safe}},
+        }],
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              min: 0,
+              max:1000,
+              maxTicksLimit:20
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: 0,
+              max: {{limits|safe}},
+              maxTicksLimit: 15
+            },
+            gridLines: {
+              color: "rgba(0, 0, 0, .125)",
+            }
+          }],
+        },
+        legend: {
+          display:false,
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock %}
